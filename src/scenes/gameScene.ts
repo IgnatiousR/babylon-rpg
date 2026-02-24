@@ -1,19 +1,39 @@
-import { Scene, type Engine } from "@babylonjs/core";
-import * as BABYLON from "@babylonjs/core";
+import {
+  Vector3,
+  MeshBuilder,
+  StandardMaterial,
+  FreeCamera,
+  HemisphericLight,
+  Scene,
+  Engine,
+  Texture,
+  Color3,
+} from "@babylonjs/core";
+
+function createGround(scene: Scene) {
+  const ground = MeshBuilder.CreateGround("ground", { width: 50, height: 50 }, scene);
+
+  const groundMat = new StandardMaterial("groundMat", scene);
+  const diffuseTex = new Texture("/textures/coastSandRocks/diffuse_1k.webp", scene);
+  const normalTex = new Texture("/textures/coastSandRocks/normal_gl_1k.webp", scene);
+  groundMat.diffuseTexture = diffuseTex;
+  groundMat.bumpTexture = normalTex;
+
+  diffuseTex.uScale = 10;
+  diffuseTex.vScale = 10;
+  normalTex.uScale = 10;
+  normalTex.vScale = 10;
+
+  groundMat.specularColor = new Color3(0, 0, 0); //remove shinyness on the diffuse texture
+
+  ground.material = groundMat;
+}
 
 export async function gameScene(
-  Babylon: typeof BABYLON,
+  // Babylon: typeof BABYLON,
   engine: Engine,
   currentScene: Scene,
 ): Promise<Scene> {
-  const {
-    Vector3,
-    MeshBuilder,
-    StandardMaterial,
-    FreeCamera,
-    HemisphericLight,
-  } = Babylon;
-
   const scene = new Scene(engine);
 
   const cam = new FreeCamera("camera", new Vector3(0, 0, -5), scene);
@@ -23,11 +43,7 @@ export async function gameScene(
 
   const box = MeshBuilder.CreateBox("box", { size: 1.5 }, scene);
 
-  const ground = MeshBuilder.CreateGround(
-    "ground",
-    { width: 50, height: 50 },
-    scene,
-  );
+  createGround(scene);
 
   const cameraContainer = MeshBuilder.CreateGround(
     "cameraContainer",
@@ -52,15 +68,8 @@ export async function gameScene(
 
   window.addEventListener("keyup", (e) => {
     const key = e.key.toLowerCase();
-    if (key === "w" || key === "arrowup" || key === "s" || key === "arrowdown")
-      moveForward = 0;
-    if (
-      key === "a" ||
-      key === "arrowleft" ||
-      key === "d" ||
-      key === "arrowright"
-    )
-      moveRight = 0;
+    if (key === "w" || key === "arrowup" || key === "s" || key === "arrowdown") moveForward = 0;
+    if (key === "a" || key === "arrowleft" || key === "d" || key === "arrowright") moveRight = 0;
   });
 
   // ←←← SMOOTH MOVEMENT WITH DELTA TIME ←←←
@@ -70,11 +79,7 @@ export async function gameScene(
     const deltaTime = engine.getDeltaTime() / 1000; // seconds
 
     cameraContainer.locallyTranslate(
-      new Vector3(
-        moveRight * speed * deltaTime,
-        0,
-        moveForward * speed * deltaTime,
-      ),
+      new Vector3(moveRight * speed * deltaTime, 0, moveForward * speed * deltaTime),
     );
   });
   await scene.whenReadyAsync();
