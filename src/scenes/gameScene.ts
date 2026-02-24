@@ -11,53 +11,22 @@ import {
 } from "@babylonjs/core";
 import { Input } from "../input";
 
-// ─── Define your input map once, anywhere before the game loop ───────────────
-//
-//  This mirrors Godot's Project > Input Map.
-//  Actions are plain strings — add as many as you like.
-//
-Input
-  // Movement actions used by the "moveX" / "moveY" axes
-  .addAction("move_right", ["KeyD", "ArrowRight"])
-  .addAction("move_left", ["KeyA", "ArrowLeft"])
-  .addAction("move_forward", ["KeyW", "ArrowUp"])
-  .addAction("move_back", ["KeyS", "ArrowDown"])
-
-  // One-shot actions
-  .addAction("jump", ["Space"])
-  .addAction("shoot", ["KeyF", "Mouse0"])
-
-  // Axes derived from action pairs  →  getAxis("moveX") / getAxis("moveY")
-  .addAxis("moveX", "move_right", "move_left")
-  .addAxis("moveY", "move_forward", "move_back");
-
-// ─── Optional: virtual joystick for mobile ────────────────────────────────────
-//
-// import { VirtualJoystick, VirtualJoystickInput } from "../input";
-//
-// const joystick = new VirtualJoystick(
-//   document.getElementById("joystick-base")!,
-//   document.getElementById("joystick-stick")!,
-// );
-// Input.addSource(new VirtualJoystickInput(joystick));   // uses "moveX"/"moveY" by default
-//
-// ─── Optional: jump button for mobile ────────────────────────────────────────
-//
-// import { TouchButton } from "../input";
-//
-// const jumpBtn = new TouchButton(document.getElementById("jump-btn")!);
-// Input.addSource({
-//   getAxis:         () => 0,
-//   isActionPressed: (name) => name === "jump" && jumpBtn.isPressed(),
-//   update:          () => {},
-// });
-
 function createGround(scene: Scene) {
-  const ground = MeshBuilder.CreateGround("ground", { width: 50, height: 50 }, scene);
+  const ground = MeshBuilder.CreateGround(
+    "ground",
+    { width: 50, height: 50 },
+    scene,
+  );
 
   const groundMat = new StandardMaterial("groundMat", scene);
-  const diffuseTex = new Texture("/textures/coastSandRocks/diffuse_1k.webp", scene);
-  const normalTex = new Texture("/textures/coastSandRocks/normal_gl_1k.webp", scene);
+  const diffuseTex = new Texture(
+    "/textures/coastSandRocks/diffuse_1k.webp",
+    scene,
+  );
+  const normalTex = new Texture(
+    "/textures/coastSandRocks/normal_gl_1k.webp",
+    scene,
+  );
   groundMat.diffuseTexture = diffuseTex;
   groundMat.bumpTexture = normalTex;
 
@@ -135,7 +104,9 @@ export async function gameScene(
 
     const { x, y } = Input.getVector2("moveX", "moveY");
 
-    cameraContainer.locallyTranslate(new Vector3(x * speed * dt, 0, y * speed * dt));
+    cameraContainer.locallyTranslate(
+      new Vector3(x * speed * dt, 0, y * speed * dt),
+    );
 
     if (Input.isActionPressed("jump")) {
       // jump();
