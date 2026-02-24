@@ -1,12 +1,7 @@
 import type { Engine, Scene } from "@babylonjs/core";
-import * as BABYLON from "@babylonjs/core";
 import { gameScene } from "./gameScene";
 
-export async function main(
-  Babylon: typeof BABYLON,
-  engine: Engine,
-  currentScene: Scene,
-) {
+export async function main(engine: Engine, currentScene: Scene) {
   let scene: Scene = currentScene;
   // let currentState = "gameScene";
 
@@ -16,7 +11,7 @@ export async function main(
   //     break;
   // }
 
-  scene = await gameScene(Babylon, engine, currentScene);
+  scene = await gameScene(engine, currentScene);
 
   engine.runRenderLoop(() => {
     scene.render();
