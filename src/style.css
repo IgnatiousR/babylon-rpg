@@ -1,3 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+/* html,
+body,
+#root {
+} */
+
 canvas {
   position: fixed;
   top: 0;
