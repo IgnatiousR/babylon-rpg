@@ -1,12 +1,13 @@
+import { Engine, Scene } from "@babylonjs/core";
 import { Input } from "./input";
 import { main } from "./scenes/main";
 import "./style.css";
-import * as BABYLON from "@babylonjs/core";
 
-const canvas = document.querySelector("canvas");
+// const canvas = document.querySelector("canvas");
+const canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 
-let engine = new BABYLON.Engine(canvas, true);
-let currentScene = new BABYLON.Scene(engine);
+let engine = new Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+let currentScene = new Scene(engine);
 
 // ─── Define your input map once, anywhere before the game loop ───────────────
 //
@@ -49,13 +50,13 @@ Input
 //   update:          () => {},
 // });
 
-const camera = new BABYLON.FreeCamera(
-  "camera1",
-  new BABYLON.Vector3(0, 0, 0),
-  currentScene,
-);
+// const camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 0, 0), currentScene);
 
 await main(engine, currentScene);
+
+window.addEventListener("resize", function () {
+  engine.resize();
+});
 
 // import * as BABYLON from "babylonjs";
 // import {
